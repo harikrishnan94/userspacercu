@@ -12,6 +12,7 @@ typedef struct rcu_global_t rcu_global_t;
 
 #define MAX_RCU_THREADS 256
 
+extern int rcu_global_size(int max_threads);
 extern int rcu_initialize(rcu_global_t *rcu_global, int max_threads);
 extern int rcu_destroy(rcu_global_t *rcu_global);
 

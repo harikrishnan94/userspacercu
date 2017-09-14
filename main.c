@@ -7,9 +7,15 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
+#include "rcu/rcu.h"
 
 int main(int argc, const char * argv[])
 {
-	printf("Hello, World!\n");
+	const int nthreads = 2;
+	rcu_global_t *rcu_list = malloc(rcu_global_size(nthreads));
+
+	rcu_initialize(rcu_list, nthreads);
+
 	return 0;
 }

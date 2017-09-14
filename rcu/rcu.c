@@ -42,13 +42,18 @@ struct rcu_global_t
 	pthread_mutex_t thread_register_mutex;
 	counter_t rcu_global_counter __attribute__ ((aligned(CACHE_LINE_SIZE)));
 	rcu_thread_local_t rcu_local[];
-};
+} __attribute__ ((aligned(CACHE_LINE_SIZE)));
 
 #define INITIALIZE_REGISTER_THREAD_MUTEX(rcu_global)	pthread_mutex_init(&(rcu_global)->thread_register_mutex, NULL)
 #define DESTROY_REGISTER_THREAD_MUTEX(rcu_global)		pthread_mutex_destroy(&(rcu_global)->thread_register_mutex)
 
 #define LOCK_REGISTER_THREAD(rcu_global)	pthread_mutex_lock(&(rcu_global)->thread_register_mutex)
 #define UNLOCK_REGISTER_THREAD(rcu_global)	pthread_mutex_unlock(&(rcu_global)->thread_register_mutex)
+
+int rcu_global_size(int max_threads)
+{
+	return max_threads * sizeof(rcu_thread_local_t) + sizeof(rcu_global_t);
+}
 
 int rcu_initialize(rcu_global_t *rcu_global, int max_threads)
 {
